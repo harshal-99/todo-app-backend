@@ -6,6 +6,7 @@ import {configureDB} from "./utils/config.js";
 import {errorHandler, tokenExtractor, tokenValidator, unknownEndpoint} from "./utils/middleware.js";
 import userRouter from "./routes/userRouter.js";
 import todoRouter from "./routes/todoRouter.js";
+import healthRouter from "./routes/healthRouter.js";
 
 
 const app = express()
@@ -17,6 +18,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(cors())
 app.use(morgan('dev'))
 
+app.use('/health', healthRouter)
 app.use('/api/auth', userRouter)
 
 app.use(tokenExtractor)
