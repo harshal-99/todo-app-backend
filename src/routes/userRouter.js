@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 import User from "../models/user.js";
 import {JWT_SECRET} from "../utils/config.js";
+import {validateErrors} from "../utils/middleware.js";
 
 
 const userRouter = Router()
@@ -17,11 +18,7 @@ userRouter.post('/signup',
 		.escape().trim().isLength({min: 3})
 		.withMessage('password must be at least 3 characters long'),
 	async (request, response, next) => {
-		const errors = validationResult(request)
-
-		if (!errors.isEmpty()) {
-			return response.status(400).json({error: errors.array()})
-		}
+		validateErrors(request, response, next)
 
 		const {username, password} = request.body
 
@@ -41,10 +38,7 @@ userRouter.post('/login',
 	body('username').escape().isString().trim(),
 	body('password').escape().isString().trim(),
 	async (request, response, next) => {
-		const errors = validationResult(request)
-		if (!errors.isEmpty()) {
-			return response.status(400).json({error: errors.array()})
-		}
+		validateErrors(request, response, next)
 
 		const {username, password} = request.body
 
